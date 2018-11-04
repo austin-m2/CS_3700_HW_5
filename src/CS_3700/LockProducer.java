@@ -1,9 +1,9 @@
 package CS_3700;
 
-public class Producer extends Thread {
+public class LockProducer extends Thread {
     LockQueue queue = null;
 
-    public Producer(LockQueue q) {
+    public LockProducer(LockQueue q) {
         queue = q;
     }
 

@@ -5,59 +5,127 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-	    LockQueue queue = new LockQueue();
-	    queue.set_max_items(500);
+        {
+            LockQueue queue = new LockQueue();
+            queue.set_max_items(500);
 
-        ArrayList<Producer> producers = new ArrayList<>();
-        ArrayList<Consumer> consumers = new ArrayList<>();
+            ArrayList<LockProducer> producers = new ArrayList<>();
+            ArrayList<LockConsumer> consumers = new ArrayList<>();
 
-        long elapsedTime = System.currentTimeMillis();
-        for (int i = 0; i < 5; i++) {
-            producers.add(new Producer(queue));
-            producers.get(i).start();
-        }
-        for (int i = 0; i < 2; i++) {
-            consumers.add(new Consumer(queue));
-            consumers.get(i).start();
-        }
-        for (int i = 0; i < producers.size(); i++) {
-            producers.get(i).join();
-        }
-        for (int i = 0; i < consumers.size(); i++) {
-            consumers.get(i).join();
+            long elapsedTime = System.currentTimeMillis();
+            for (int i = 0; i < 5; i++) {
+                producers.add(new LockProducer(queue));
+                producers.get(i).start();
+            }
+            for (int i = 0; i < 2; i++) {
+                consumers.add(new LockConsumer(queue));
+                consumers.get(i).start();
+            }
+            for (int i = 0; i < producers.size(); i++) {
+                producers.get(i).join();
+            }
+            for (int i = 0; i < consumers.size(); i++) {
+                consumers.get(i).join();
+            }
+
+            elapsedTime = System.currentTimeMillis() - elapsedTime;
+            float elapsedTimeInSeconds = (float) elapsedTime / 1000f;
+            System.out.println("LOCKS: 5 PRODUCERS, 2 CONSUMERS: " + elapsedTimeInSeconds + " seconds");
+
+
+            //remove dead threads from lists
+            producers.clear();
+            consumers.clear();
+            queue = new LockQueue();
+            queue.set_max_items(200);
+
+            elapsedTime = System.currentTimeMillis();
+
+            for (int i = 0; i < 2; i++) {
+                producers.add(new LockProducer(queue));
+                producers.get(i).start();
+            }
+            for (int i = 0; i < 5; i++) {
+                consumers.add(new LockConsumer(queue));
+                consumers.get(i).start();
+            }
+            for (int i = 0; i < producers.size(); i++) {
+                producers.get(i).join();
+            }
+            for (int i = 0; i < consumers.size(); i++) {
+                consumers.get(i).join();
+            }
+
+            elapsedTime = System.currentTimeMillis() - elapsedTime;
+            elapsedTimeInSeconds = (float) elapsedTime / 1000f;
+            System.out.println("LOCKS: 2 PRODUCERS, 5 CONSUMERS: " + elapsedTimeInSeconds + " seconds");
+
+
         }
 
-        elapsedTime = System.currentTimeMillis() - elapsedTime;
-        float elapsedTimeInSeconds = (float) elapsedTime / 1000f;
-        System.out.println("LOCKS: 5 PRODUCERS, 2 CONSUMERS: " + elapsedTimeInSeconds);
+
+        //TIME FOR ISOLATED SECTIONS
+        {
+            IsolatedQueue queue = new IsolatedQueue();
+            queue.set_max_items(500);
+
+            ArrayList<IsolatedProducer> producers = new ArrayList<>();
+            ArrayList<IsolatedConsumer> consumers = new ArrayList<>();
+
+            long elapsedTime = System.currentTimeMillis();
+            for (int i = 0; i < 5; i++) {
+                producers.add(new IsolatedProducer(queue));
+                producers.get(i).start();
+            }
+            for (int i = 0; i < 2; i++) {
+                consumers.add(new IsolatedConsumer(queue));
+                consumers.get(i).start();
+            }
+            for (int i = 0; i < producers.size(); i++) {
+                producers.get(i).join();
+            }
+            for (int i = 0; i < consumers.size(); i++) {
+                consumers.get(i).join();
+            }
+
+            elapsedTime = System.currentTimeMillis() - elapsedTime;
+            float elapsedTimeInSeconds = (float) elapsedTime / 1000f;
+            System.out.println("ISOLATED: 5 PRODUCERS, 2 CONSUMERS: " + elapsedTimeInSeconds + " seconds");
 
 
-        //remove dead threads from lists
-        producers.clear();
-        consumers.clear();
-        queue = new LockQueue();
-        queue.set_max_items(200);
+            //remove dead threads from lists
+            producers.clear();
+            consumers.clear();
+            queue = new IsolatedQueue();
+            queue.set_max_items(200);
 
-        elapsedTime = System.currentTimeMillis();
+            elapsedTime = System.currentTimeMillis();
 
-        for (int i = 0; i < 2; i++) {
-            producers.add(new Producer(queue));
-            producers.get(i).start();
+            for (int i = 0; i < 2; i++) {
+                producers.add(new IsolatedProducer(queue));
+                producers.get(i).start();
+            }
+            for (int i = 0; i < 5; i++) {
+                consumers.add(new IsolatedConsumer(queue));
+                consumers.get(i).start();
+            }
+            for (int i = 0; i < producers.size(); i++) {
+                producers.get(i).join();
+            }
+            for (int i = 0; i < consumers.size(); i++) {
+                consumers.get(i).join();
+            }
+
+            elapsedTime = System.currentTimeMillis() - elapsedTime;
+            elapsedTimeInSeconds = (float) elapsedTime / 1000f;
+            System.out.println("ISOLATED: 2 PRODUCERS, 5 CONSUMERS: " + elapsedTimeInSeconds + " seconds");
+
         }
-        for (int i = 0; i < 5; i++) {
-            consumers.add(new Consumer(queue));
-            consumers.get(i).start();
-        }
-        for (int i = 0; i < producers.size(); i++) {
-            producers.get(i).join();
-        }
-        for (int i = 0; i < consumers.size(); i++) {
-            consumers.get(i).join();
-        }
 
-        elapsedTime = System.currentTimeMillis() - elapsedTime;
-        elapsedTimeInSeconds = (float) elapsedTime / 1000f;
-        System.out.println("LOCKS: 2 PRODUCERS, 5 CONSUMERS: " + elapsedTimeInSeconds);
+
+        Atomic atomic = new Atomic();
+        atomic.go1();
+        atomic.go2();
 
 
     }

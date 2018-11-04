@@ -1,9 +1,11 @@
 package CS_3700;
 
-public class Consumer extends Thread {
-    LockQueue queue = null;
+public class IsolatedConsumer extends Thread {
+    IsolatedQueue queue = null;
 
-    public Consumer(LockQueue q) {
+
+
+    public IsolatedConsumer(IsolatedQueue q) {
         queue = q;
     }
 
@@ -15,7 +17,7 @@ public class Consumer extends Thread {
                     interrupt();
                 }
                 //System.out.println(Thread.currentThread().getName() + ": Sleeping for 1 second...");
-                sleep(100);
+                sleep(10);
             }
         } catch (InterruptedException e) {
             return;
