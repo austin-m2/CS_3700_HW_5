@@ -128,5 +128,37 @@ public class Main {
         atomic.go2();
 
 
+        //actor time!
+        ActorMain actorstuff = new ActorMain();
+        actorstuff.go1();
+        actorstuff.go2();
+
+
+        //serial sieve time!
+        sieve();
+
+
+
+
+
+    }
+
+    private static void sieve() {
+        long elapsedTime = System.currentTimeMillis();
+        final int MAX = 1000000;
+        boolean[] array = new boolean[MAX];
+        double limit = Math.sqrt(MAX);
+
+        for (int i = 2; i < limit; i++) {
+            if (!array[i]) {
+                for (int j = i * i; j < MAX; j += i) {
+                    array[j] = true;
+                }
+            }
+        }
+
+        elapsedTime = System.currentTimeMillis() - elapsedTime;
+
+        System.out.println("SINGLE-THREADED SIEVE: " + elapsedTime + " ms");
     }
 }
