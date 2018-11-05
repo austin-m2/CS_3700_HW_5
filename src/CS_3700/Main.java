@@ -137,6 +137,9 @@ public class Main {
         //serial sieve time!
         sieve();
 
+        //actor sieve time
+        actorstuff.sieve();
+
 
 
 
