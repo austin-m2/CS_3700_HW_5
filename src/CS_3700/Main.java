@@ -6,11 +6,6 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         {
-
-            //actor sieve time
-            ActorMain actorstuff = new ActorMain();
-            actorstuff.sieve();
-
             LockQueue queue = new LockQueue();
             queue.set_max_items(500);
 
@@ -144,10 +139,6 @@ public class Main {
 
         //actor sieve time
         actorstuff.sieve();
-
-
-
-
 
     }
 

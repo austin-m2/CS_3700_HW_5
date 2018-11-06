@@ -31,28 +31,15 @@ public class ActorPrime extends AbstractActor{
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(CheckIfLocallyPrime.class, biu -> {
+                .match(CheckIfLocallyPrime.class, cilp -> {
                     if (firstPrime == -1) {
-                        firstPrime = biu.number;
-                        primeArray[biu.number] = true;
-                        //System.out.println(biu.number);
-                        System.out.println("New Actor: " + biu.number);
+                        firstPrime = cilp.number;
+                        primeArray[cilp.number] = true;
+                        System.out.println("New Actor: " + cilp.number);
                         childActor = getContext().actorOf(ActorPrime.props(primes, primeArray));
-                    } else if ((biu.number % firstPrime) != 0) {
-                            //give to child actor
-                            //System.out.println("local prime: " + firstPrime + "new prime: " + biu.number);
-                            //Thread.sleep(100);
-                            childActor.tell(new CheckIfLocallyPrime(biu.number),ActorRef.noSender());
+                    } else if ((cilp.number % firstPrime) != 0) {
+                            childActor.tell(new CheckIfLocallyPrime(cilp.number),ActorRef.noSender());
                     }
-
-
-                    /*if (childActor == null) {
-                        childActor = getContext().actorOf(ActorPrime.props(biu.number));
-                    } else {
-
-                    }*/
-
-
                 })
                 .build();
     }
