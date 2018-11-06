@@ -111,7 +111,7 @@ class C extends Thread {
                 if (atomic.num_items_consumed == atomic.max_items) { interrupt(); }
                 queue.take();
                 atomic.increment_counter();
-                sleep(10);
+                sleep(1000);
             } catch (InterruptedException e) {
                 return;
             }

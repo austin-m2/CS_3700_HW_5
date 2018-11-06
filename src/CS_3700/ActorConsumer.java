@@ -33,7 +33,7 @@ public class ActorConsumer extends AbstractActor {
                         biu.queue.take();
                         biu.counter.getAndIncrement();
                         //System.out.println(biu.counter.get());
-                        Thread.sleep(10);
+                        Thread.sleep(1000);
                     }
                 })
                 .build();

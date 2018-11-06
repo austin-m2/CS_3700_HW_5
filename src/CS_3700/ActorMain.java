@@ -110,8 +110,15 @@ public class ActorMain {
         final ActorSystem system = ActorSystem.create();
         final ActorRef actorPrime = system.actorOf(ActorPrime.props(primes, primeArray));
 
+/*
         actorPrime.tell(new ActorPrime.CheckIfLocallyPrime(2), ActorRef.noSender());
         for (int i = 3; i < 1000000; i+= 2) {
+            actorPrime.tell(new ActorPrime.CheckIfLocallyPrime(i), ActorRef.noSender());
+        }
+*/
+
+        actorPrime.tell(new ActorPrime.CheckIfLocallyPrime(3), ActorRef.noSender());
+        for (int i = 5; i < 1000000; i+= 2) {
             actorPrime.tell(new ActorPrime.CheckIfLocallyPrime(i), ActorRef.noSender());
         }
 

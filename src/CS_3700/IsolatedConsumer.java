@@ -17,7 +17,7 @@ public class IsolatedConsumer extends Thread {
                     interrupt();
                 }
                 //System.out.println(Thread.currentThread().getName() + ": Sleeping for 1 second...");
-                sleep(10);
+                sleep(1000);
             }
         } catch (InterruptedException e) {
             return;

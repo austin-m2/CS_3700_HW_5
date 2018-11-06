@@ -7,7 +7,7 @@ import akka.actor.Props;
 import java.util.Vector;
 
 public class ActorPrime extends AbstractActor{
-    private int firstPrime = 0;
+    private int firstPrime = -1;
     private Vector<Integer> primes;
     private boolean[] primeArray;
     private static ActorRef childActor = null;
@@ -21,7 +21,7 @@ public class ActorPrime extends AbstractActor{
         this.primeArray = primeArray;
     }
 
-    static public class CheckIfLocallyPrime {
+    public static class CheckIfLocallyPrime {
         int number;
         public CheckIfLocallyPrime(int number) {
             this.number = number;
@@ -32,20 +32,19 @@ public class ActorPrime extends AbstractActor{
     public Receive createReceive() {
         return receiveBuilder()
                 .match(CheckIfLocallyPrime.class, biu -> {
-                    if (firstPrime == 0) {
+                    if (firstPrime == -1) {
                         firstPrime = biu.number;
                         primeArray[biu.number] = true;
                         //System.out.println(biu.number);
                         System.out.println("New Actor: " + biu.number);
                         childActor = getContext().actorOf(ActorPrime.props(primes, primeArray));
-                    } else {
-                        if (biu.number % firstPrime != 0) {
+                    } else if ((biu.number % firstPrime) != 0) {
                             //give to child actor
                             //System.out.println("local prime: " + firstPrime + "new prime: " + biu.number);
-                            Thread.sleep(100);
+                            //Thread.sleep(100);
                             childActor.tell(new CheckIfLocallyPrime(biu.number),ActorRef.noSender());
-                        }
                     }
+
 
                     /*if (childActor == null) {
                         childActor = getContext().actorOf(ActorPrime.props(biu.number));
